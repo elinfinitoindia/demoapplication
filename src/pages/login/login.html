@@ -1,0 +1,49 @@
+
+<ion-header>
+  <ion-navbar>
+    <ion-title>login</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="form-content">
+
+  <img src="assets/imgs/icon.png" alt="" style="
+    margin: 10px auto 20px;
+    display: block;
+    width:180px;
+">
+
+  <ng-container *ngIf="islogin; then thenTemplate; else elseTemplate"></ng-container>
+  <ng-template #thenTemplate>
+ 
+    <p class="cstitle"> Welcome Back</p>
+    <p class="cstitle">{{user}}</p>
+  <button ion-button full class="login-button"  type="submit" (click)="logOut()">Log Out</button>
+  </ng-template>
+  <ng-template #elseTemplate>
+    <form class="form" [formGroup]="login_form" (ngSubmit)="login(login_form.value)">
+      <ion-label class="cstitle">Welcome back</ion-label>
+      <p class="skip-login"><a (click)="skipLogin()">Click here to skip login!</a></p>
+     
+      <ion-item>
+        <ion-label color="mycolor">Username</ion-label>
+        <ion-input type="text" formControlName="username" class="form-controll" required></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label color="mycolor">Password</ion-label>
+        <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
+      </ion-item>
+      <p class="error-message" *ngIf="error_message">{{error_message}}</p>
+      <button ion-button full class="login-button" [disabled]="!login_form.valid" type="submit">Login</button>
+     <p class="skip-login">Not a user yet?</p>
+      <p class="skip-login"><a (click)="goToRegister()">Click here to Register!</a></p>
+    </form>
+  </ng-template>
+  
+ 
+</ion-content>
+

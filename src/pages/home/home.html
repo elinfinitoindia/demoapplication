@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title color="mycolor">
+    Palia News 
+    </ion-title>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+   <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<ng-container *ngIf="isConnected; then thenTemplate; else elseTemplate"></ng-container>
+<ng-template #thenTemplate>
+  <div *ngIf="isdata">
+<ion-row>
+  <ion-col width-90>
+     <ion-slides>
+  <ion-slide *ngFor="let item of adddata">
+    <img src="{{item.link}}" alt="">
+  </ion-slide>
+</ion-slides>
+  </ion-col>
+</ion-row>
+ </div>
+  <ion-card *ngFor="let post of posts">
+    <ion-card-content>
+      <ion-card-title [innerHTML]="post.title.rendered" style="color:red;font-weight: 600;"></ion-card-title>
+     
+      <p [innerHTML]="post.excerpt.rendered" class="postexcerpt" style="font-size:1.6rem !important;"></p>
+      <!-- <p class="post-content" [innerHTML]="post.content.rendered"></p> -->
+    </ion-card-content>
+    <ion-row no-padding>
+        <ion-col >
+          <button ion-button round small color="mycolor" (click)="postTapped($event, post)" icon-start>
+            Read More
+          </button>
+         
+        </ion-col>
+      <ion-col text-right>
+        <button ion-button clear small color="mycolor" icon-start>
+          <p class="date" style="color: #ff6700;">{{post.date.split('T')[0]}} </p>
+        </button>
+      </ion-col>
+   
+    </ion-row>
+  </ion-card>
+    <ion-fab right bottom>
+      <button ion-fab color="mycolor" (click)="shareApplication()">
+        <ion-icon name="share"></ion-icon>
+      </button>
+    </ion-fab>
+    <ion-infinite-scroll [enabled]="morePagesAvailable" (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more posts ...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ng-template>
+<ng-template #elseTemplate>
+  <h3>Please connect to internet</h3>
+</ng-template>
+
+ 
+</ion-content>
