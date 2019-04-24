@@ -23,13 +23,15 @@ export class WordpressProvider {
     console.log('Hello WordpressProvider Provider');
   }
 
-  getRecentPosts(page: number = 1) {
+  getRecentPosts(page: number , categoryId:number) {
     let header: Headers = new Headers();
     header.append('Access-Control-Allow-Origin', '*');
+     let category_url = categoryId? ("&categories=" + categoryId): "";
     //if we want to query posts by category
     return this.http.get(
       Config.WORDPRESS_REST_API_URL
-      + 'posts?page=' + page)
+      + 'posts?page=' + page +category_url
+      )
       .map(res => res.json());
   }
   getComments(postId: number, page: number = 1) {
@@ -100,6 +102,23 @@ export class WordpressProvider {
     let networkType = this.network.type;
     this.createToast(`You are now ${connectionState} via ${networkType}`);
 
+   }
+  
+  getEvents() {
+    return this.http.get('')
+     .map((res: any) => res.json());
+  }
+
+   getRecentEvents(page: number , categoryId:number) {
+    let header: Headers = new Headers();
+    header.append('Access-Control-Allow-Origin', '*');
+     let category_url = categoryId? ("&categories=" + categoryId): "";
+    //if we want to query posts by category
+    return this.http.get(
+      Config.WORDPRESS_REST_API_URL
+      + 'posts?page=' + page +category_url
+      )
+      .map(res => res.json());
   }
 }
 

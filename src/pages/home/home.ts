@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser';
 import { Http, Headers } from '@angular/http';
 import * as Config from '../../config';
@@ -11,6 +11,9 @@ import { PostpagePage } from '../postpage/postpage'
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { AdMobPro } from '@ionic-native/admob-pro';
+import { Network } from '@ionic-native/network';
+import { AppMinimize } from '@ionic-native/app-minimize';
+import { App } from 'ionic-angular';
 
 
 
@@ -25,6 +28,7 @@ export class HomePage{
   adddata: any;
   isdata: any;
   isConnected: boolean;
+  isOnline: boolean;
   constructor(
     public navCtrl: NavController, private iab: InAppBrowser, private http: Http,
     public navParams: NavParams,
@@ -32,15 +36,43 @@ export class HomePage{
     public wordpress: WordpressProvider,
     private socialSharing: SocialSharing,
     private admob: AdMobPro,
+    private network: Network,
+    private platform:Platform,
+    private appMinimize: AppMinimize,
+    public app: App,
 
   ) {
     this.wordpress.mySubject.subscribe(res => {
       this.isConnected = res;
     })
-    
+
+  
   }
 
+  ionViewDidEnter() {
+    
+}
+  
+
   ionViewWillEnter() {
+  
+    
+    this.network.onConnect().subscribe(data => {
+      console.log(data)
+      if (this.isOnline == false) {
+        this.doRefresh();
+      }
+      this.wordpress.createToast('You are online');
+    }, error => console.error(error));
+    
+    this.network.onDisconnect().subscribe(data => {
+      console.log(data)
+      this.isOnline = false;
+    
+      this.wordpress.createToast('You are offline');
+      
+    }, error => console.error(error));
+    
     if (this.isConnected == true) {
       
     
@@ -54,7 +86,7 @@ export class HomePage{
         let loading = this.loadingCtrl.create();
         loading.present();
     
-        this.wordpress.getRecentPosts()
+        this.wordpress.getRecentPosts(1,7)
           .subscribe(data => {
             for (let post of data) {
               post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
@@ -87,9 +119,11 @@ export class HomePage{
     
   }
 
-  doRefresh(refresher) {
 
-    this.wordpress.getRecentPosts()
+
+  doRefresh() {
+
+    this.wordpress.getRecentPosts(1,7)
       .subscribe(data => {
         for (let post of data) {
           post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
@@ -102,30 +136,42 @@ export class HomePage{
       });
 
 
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 2000);
+    // setTimeout(() => {
+    //   console.log('Async operation has ended');
+    //   refresher.complete();
+    // }, 2000);
   }
 
   doInfinite(infiniteScroll) {
     let page = (Math.ceil(this.posts.length / 10)) + 1;
     let loading = true;
 
-    return this.http.get(
-      Config.WORDPRESS_REST_API_URL
-      + 'posts?page=' + page)
-      .map(res => res.json())
+    // return this.http.get(
+    //   Config.WORDPRESS_REST_API_URL
+    //   + 'posts?page=' + page)
+    //   .map(res => res.json())
+    //   .subscribe(data => {
+    //     for (let post of data) {
+    //       if (!loading) {
+    //         infiniteScroll.complete();
+    //       }
+    //       post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
+    //       this.posts.push(post);
+    //       loading = false;
+    //     }
+    //   })
+    this.wordpress.getRecentPosts(page, 7)
       .subscribe(data => {
         for (let post of data) {
-          if (!loading) {
-            infiniteScroll.complete();
-          }
           post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
           this.posts.push(post);
-          loading = false;
         }
-      })
+    
+      }, err => {
+        this.wordpress.createToast('Unable to load news');
+    
+      });
+    
 
   }
   postTapped(event, post) {

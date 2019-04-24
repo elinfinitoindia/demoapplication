@@ -52,7 +52,7 @@ export class PostpagePage {
       backAction();
     }, 2);
   if (admob) admob.createBanner({
-    adId: 'ca-app-pub-3940256099942544/6300978111',
+    adId: Config.adMobIdBanner,
     position: admob.AD_POSITION.BOTTOM_CENTER,
     adSize: 'MEDIUM_RECTANGLE',
     autoShow: true
@@ -166,7 +166,9 @@ export class PostpagePage {
 
   shareNews(post) {
     console.log(this.post);
-    var message = this.post.title.rendered;
+    var message = this.post.title.rendered + `
+      Download Palia News android app at http://elinfinitoindia.in;
+    `;
     console.log(message)
     this.socialSharing.share(message, null, null, this.post.link).then(() => {
       // Sharing via email is possible

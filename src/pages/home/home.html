@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content >
-   <ion-refresher (ionRefresh)="doRefresh($event)">
+   <ion-refresher (ionRefresh)="doRefresh()">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -29,7 +29,7 @@
  </div>
   <ion-card *ngFor="let post of posts">
     <ion-card-content>
-      <ion-card-title [innerHTML]="post.title.rendered" style="color:red;font-weight: 600;"></ion-card-title>
+      <ion-card-title [innerHTML]="post.title.rendered" style="color:red;font-weight: 500;"></ion-card-title>
      
       <p [innerHTML]="post.excerpt.rendered" class="postexcerpt" style="font-size:1.6rem !important;"></p>
       <!-- <p class="post-content" [innerHTML]="post.content.rendered"></p> -->
@@ -49,11 +49,7 @@
    
     </ion-row>
   </ion-card>
-    <ion-fab right bottom>
-      <button ion-fab color="mycolor" (click)="shareApplication()">
-        <ion-icon name="share"></ion-icon>
-      </button>
-    </ion-fab>
+  
     <ion-infinite-scroll [enabled]="morePagesAvailable" (ionInfinite)="doInfinite($event)">
       <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more posts ...">
       </ion-infinite-scroll-content>
@@ -63,5 +59,9 @@
   <h3>Please connect to internet</h3>
 </ng-template>
 
- 
+   <ion-fab right bottom>
+      <button ion-fab color="mycolor" (click)="shareApplication()">
+        <ion-icon name="share"></ion-icon>
+      </button>
+    </ion-fab>
 </ion-content>

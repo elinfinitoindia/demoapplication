@@ -8,16 +8,50 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
-  </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+  
+  <img src="assets/imgs/icon.png" alt="" style="
+    margin: 10px auto 20px;
+    display: block;
+    width:180px;">
+ <ion-row>
+      <ion-col col-12 text-center class="skip-login" >
+       Editor
+      </ion-col>
+      <ion-col col-12 text-center class="information" >
+       Om Prakash Suman
+      </ion-col>
+       <ion-col col-12 text-center>
+        <ion-icon ios="ios-mail" md="md-mail" class="skip-login"></ion-icon>
+      </ion-col>
+      <ion-col col-12 class="information" text-center>
+      sumanjireporter@gmail.com
+      </ion-col>
+       <!-- <ion-col col-12 text-center>
+      <ion-icon ios="ios-call" md="md-call" class="skip-login"></ion-icon>
+      </ion-col>
+      <ion-col col-12 text-center class="information">
+      +91-8851-610-111
+      </ion-col> -->
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 text-center class="skip-login" >
+       Developed By
+      </ion-col>
+      <ion-col col-12 text-center class="information" >
+        Prateek Agnihotri
+      </ion-col>
+       <ion-col col-12 text-center>
+        <ion-icon ios="ios-mail" md="md-mail" class="skip-login"></ion-icon>
+      </ion-col>
+      <ion-col col-12 class="information" text-center>
+      prateek.it.555@gmail.com
+      </ion-col>
+       <ion-col col-12 text-center>
+      <ion-icon ios="ios-call" md="md-call" class="skip-login"></ion-icon>
+      </ion-col>
+      <ion-col col-12 text-center class="information">
+      +91-8851-610-111
+      </ion-col>
+    </ion-row>
+    
 </ion-content>

@@ -23,6 +23,22 @@ export class AuthenticationProvider {
     return this.nativeStorage.setItem('User', user);
   }
 
+  setBannerId(data) {
+    this.nativeStorage.setItem('Bannerid',data.id)
+  }
+  
+  setInterId(data) {
+    this.nativeStorage.setItem('Interid',data.id)
+  }
+
+  getBannerId() {
+    return this.nativeStorage.getItem('Bannerid');
+  }
+
+  getInterid() {
+    return this.nativeStorage.getItem('Interid')
+  }
+
   logOut() {
     return this.nativeStorage.clear();
   }
@@ -43,5 +59,11 @@ export class AuthenticationProvider {
     header.append('Authorization', 'Basic ' + token);
     return this.http.post(Config.WORDPRESS_URL + 'wp-json/jwt-auth/v1/token/validate?token=' + token,
       {}, { headers: header })
+  }
+
+  getAdmobid() {
+    return this.http.get('https://jsonstorage.net/api/items/a337eb71-9129-42e0-927d-26f6b00afd2c')
+      .map((res) => res.json());
+    
   }
 }

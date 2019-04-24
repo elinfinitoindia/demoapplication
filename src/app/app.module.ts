@@ -23,12 +23,15 @@ import { Network } from '@ionic-native/network';
     MyApp,
     HomePage,
     ListPage,
-        PostpagePage,
+    PostpagePage
+        
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpModule
+    HttpModule,
+    
+    
     
   ],
   bootstrap: [IonicApp],
