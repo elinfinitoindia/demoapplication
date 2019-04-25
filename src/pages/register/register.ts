@@ -4,7 +4,14 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 
-@IonicPage()
+@IonicPage(
+  {
+    defaultHistory: ['LoginPage',]
+
+  }
+
+
+)
 @Component({
   selector: 'page-register',
   templateUrl: 'register.html',
@@ -18,9 +25,9 @@ export class RegisterPage {
     public formBuilder: FormBuilder,
     public wordpressService: WordpressProvider,
     public authenticationService: AuthenticationProvider,
-    private platform:Platform
-  ) { 
-      let backAction = platform.registerBackButtonAction(() => {
+    private platform: Platform
+  ) {
+    let backAction = platform.registerBackButtonAction(() => {
       console.log("second");
       this.navCtrl.pop();
       backAction();

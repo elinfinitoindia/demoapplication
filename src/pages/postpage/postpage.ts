@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { LoadingController, AlertController } from 'ionic-angular';
-import { HomePage } from '../home/home';
-
-import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
 import { Http, Headers } from '@angular/http';
@@ -13,14 +10,11 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
 import { LoginPage } from '../login/login';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { AdMobPro } from '@ionic-native/admob-pro';
-/**
- * Generated class for the PostpagePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-@IonicPage()
+@IonicPage({
+  segment:'posts/:id',
+   defaultHistory: ['HomePage',]
+})
 @Component({
   selector: 'page-postpage',
   templateUrl: 'postpage.html',
@@ -32,7 +26,7 @@ export class PostpagePage {
   title: string;
   comments: Array<any> = new Array<any>();
   morePagesAvailable: boolean = true;
-  
+  public postid;
 
   constructor(
     public navParams: NavParams,
@@ -57,8 +51,6 @@ export class PostpagePage {
     adSize: 'MEDIUM_RECTANGLE',
     autoShow: true
   });
-  
-    
   }
 
   ionViewDidLoad() {
@@ -68,13 +60,15 @@ export class PostpagePage {
   ionViewWillEnter() {
     this.morePagesAvailable = true;
     let loading = this.loadingCtrl.create();
-
     loading.present();
-
-    this.post = this.navParams.get('item');
-    this.title = this.navParams.data.item.title.rendered;
+    let id = this.navParams.get('id');
+    console.log(id);
+    this.wordpressService.getPostById(id).subscribe(res => {
+      this.post = res[0];
+      console.log(this.post);
+      this.title = this.post.title.rendered;
+    })
     loading.dismiss();
- 
   }
 
   getComments() {

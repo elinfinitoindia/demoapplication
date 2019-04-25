@@ -34,6 +34,8 @@ export class WordpressProvider {
       )
       .map(res => res.json());
   }
+
+
   getComments(postId: number, page: number = 1) {
     return this.http.get(
       Config.WORDPRESS_REST_API_URL
@@ -41,6 +43,15 @@ export class WordpressProvider {
       + '&page=' + page)
       .map(res => res.json());
   }
+
+
+  getPostById(data) {
+    return this.http
+      .get('http://palianews.com/wp-json/wp/v2/posts?include='+data)
+      .map((res) => res.json());
+  }
+
+
   createComment(postId, user, comment) {
     let header: Headers = new Headers();
     header.append('Authorization', 'Bearer ' + user.token);

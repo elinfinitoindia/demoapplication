@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Platform, IonicPage } from 'ionic-angular';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser';
 import { Http, Headers } from '@angular/http';
 import * as Config from '../../config';
@@ -15,7 +15,7 @@ import { Network } from '@ionic-native/network';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { App } from 'ionic-angular';
 
-
+@IonicPage()
 
 @Component({
   selector: "page-home",
@@ -175,8 +175,9 @@ export class HomePage{
 
   }
   postTapped(event, post) {
-    this.navCtrl.push(PostpagePage, {
-      item: post
+    console.log(post);
+    this.navCtrl.push('PostpagePage', {
+      id: post.id
     });
   }
 

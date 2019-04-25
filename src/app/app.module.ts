@@ -17,31 +17,25 @@ import { HttpModule } from '@angular/http';
 import { Clipboard } from '@ionic-native/clipboard';
 import { PostpagePage } from '../pages/postpage/postpage';
 import { Network } from '@ionic-native/network';
-
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { BranchIo } from '@ionic-native/branch-io';
+import { Deeplinks } from '@ionic-native/deeplinks';
+import { LoginPage } from '../pages/login/login';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage,
-    PostpagePage
-        
+    ListPage  
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {}, 
+    ),
     HttpModule,
-    
-    
-    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
     ListPage,
-    PostpagePage
-    
-  
   ],
   providers: [
     StatusBar,
@@ -57,8 +51,11 @@ import { Network } from '@ionic-native/network';
       Clipboard,
       WordpressProvider,
     AuthenticationProvider,
-    Network
-      
+    Network,
+    LocalNotifications,
+    BranchIo,
+    Deeplinks
+    
   ]
 })
 export class AppModule {}

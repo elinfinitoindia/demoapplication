@@ -1,5 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <branch-config>
+        <branch-key value="key_test_khSaJrLKeR8L1yvBMlS0RicoAxgK5a3Z" />
+        <uri-scheme value="palianews" />
+        <link-domain value="palianews.com" />
+        <ios-team-release value="PW4Q8885U7" />
+    </branch-config>
     <name>Palia News</name>
     <description>Now get latest news about your city on palia news application</description>
     <author email="prateek.it.555@gmail.com" href="">Prateek Agnihotri</author>
@@ -19,8 +25,8 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
-    <preference name="FadeSplashScreen" value="false"/>
-<preference name="AutoHideSplashScreen" value="false"/>
+    <preference name="FadeSplashScreen" value="false" />
+    <preference name="AutoHideSplashScreen" value="false" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -93,4 +99,23 @@
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <allow-navigation href="http://192.168.225.52:8100" sessionid="eb6c21cf" />
     <engine name="android" spec="7.1.4" />
+    <plugin name="branch-cordova-sdk" spec="3.1.6" />
+    <plugin name="ionic-plugin-deeplinks" spec="1.0.19">
+        <variable name="URL_SCHEME" value="palianews" />
+        <variable name="DEEPLINK_SCHEME" value="https" />
+        <variable name="DEEPLINK_HOST" value="palianews.com" />
+        <variable name="ANDROID_PATH_PREFIX" value="/" />
+        <variable name="ANDROID_2_PATH_PREFIX" value="/" />
+        <variable name="ANDROID_3_PATH_PREFIX" value="/" />
+        <variable name="ANDROID_4_PATH_PREFIX" value="/" />
+        <variable name="ANDROID_5_PATH_PREFIX" value="/" />
+        <variable name="DEEPLINK_2_SCHEME" value=" " />
+        <variable name="DEEPLINK_2_HOST" value=" " />
+        <variable name="DEEPLINK_3_SCHEME" value=" " />
+        <variable name="DEEPLINK_3_HOST" value=" " />
+        <variable name="DEEPLINK_4_SCHEME" value=" " />
+        <variable name="DEEPLINK_4_HOST" value=" " />
+        <variable name="DEEPLINK_5_SCHEME" value=" " />
+        <variable name="DEEPLINK_5_HOST" value=" " />
+    </plugin>
 </widget>
