@@ -131,6 +131,12 @@ export class WordpressProvider {
       )
       .map(res => res.json());
   }
+
+
+  getAppLink() {
+    return this.http.get('https://jsonstorage.net/api/items/f8ffa470-4360-4206-908b-d944b7c690a1')
+      .map(res => res.json());
+  }
 }
 
 

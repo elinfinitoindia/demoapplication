@@ -29,6 +29,7 @@ export class HomePage{
   isdata: any;
   isConnected: boolean;
   isOnline: boolean;
+  applink: any;
   constructor(
     public navCtrl: NavController, private iab: InAppBrowser, private http: Http,
     public navParams: NavParams,
@@ -182,24 +183,39 @@ export class HomePage{
   }
 
   shareApplication() {
-    var data;
-    var message = 'Palia News now available on playstore, download it for latest news around you.';
-    
-    this.http.get('https://jsonstorage.net/api/items/f8ffa470-4360-4206-908b-d944b7c690a1')
-      .map((res)=>res.json())
-      .subscribe(res => {
-       data = res;
-        this.socialSharing.share(message, null, null, data.link).then(() => {
-          console.log(data.link);
-        }).catch(() => {
-          // Sharing via email is not possible
-        });
+   
+    //  https://jsonstorage.net/api/items/9ac59ecf-ee8d-459a-8d90-499b4f71978f
+    // this.http.get('https://jsonstorage.net/api/items/f8ffa470-4360-4206-908b-d944b7c690a1')
+    //   .map((res)=>res.json())
+    //   .subscribe(res => {
+    //    data = res;
+    //     this.socialSharing.share(message, null, null, data.link).then(() => {
+    //       console.log(data.link);
+    //     }).catch(() => {
+    //       // Sharing via email is not possible
+    //     });
         
-    },
-      err => {
-        console.log('unable to share link')
-      }
-    )
+    // },
+    //   err => {
+    //     console.log('unable to share link')
+    //   }
+    // )
+
+
+
+    this.wordpress.getAppLink().subscribe(res => {
+      this.applink = res;
+    }
+      , err => {
+        console.log('cant get applink');
+      })
+    
+    
+    this.socialSharing.share(this.applink.message, null, null, this.applink.link).then(() => {
+      console.log(this.applink);
+    }).catch(() => {
+      console.log('error in sharing');
+    })
   
    
   }

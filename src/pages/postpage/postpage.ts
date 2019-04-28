@@ -12,8 +12,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { AdMobPro } from '@ionic-native/admob-pro';
 
 @IonicPage({
-  segment:'posts/:id',
-   defaultHistory: ['HomePage',]
+  segment: 'posts/:id',
+  defaultHistory: ['HomePage',]
 })
 @Component({
   selector: 'page-postpage',
@@ -24,6 +24,7 @@ export class PostpagePage {
   post: any;
   user: string;
   title: string;
+  data: any;
   comments: Array<any> = new Array<any>();
   morePagesAvailable: boolean = true;
   public postid;
@@ -45,12 +46,12 @@ export class PostpagePage {
       this.navCtrl.pop();
       backAction();
     }, 2);
-  if (admob) admob.createBanner({
-    adId: Config.adMobIdBanner,
-    position: admob.AD_POSITION.BOTTOM_CENTER,
-    adSize: 'MEDIUM_RECTANGLE',
-    autoShow: true
-  });
+    if (admob) admob.createBanner({
+      adId: Config.adMobIdBanner,
+      position: admob.AD_POSITION.BOTTOM_CENTER,
+      adSize: 'MEDIUM_RECTANGLE',
+      autoShow: true
+    });
   }
 
   ionViewDidLoad() {
@@ -67,7 +68,13 @@ export class PostpagePage {
       this.post = res[0];
       console.log(this.post);
       this.title = this.post.title.rendered;
-    })
+    });
+    this.wordpressService.getAppLink()
+      .subscribe(res => {
+        this.data = res;
+        console.log(this.data);
+      })
+    
     loading.dismiss();
   }
 
@@ -159,12 +166,16 @@ export class PostpagePage {
   }
 
   shareNews(post) {
-    console.log(this.post);
-    var message = this.post.title.rendered + `
-      Download Palia News android app at http://elinfinitoindia.in;
-    `;
-    console.log(message)
-    this.socialSharing.share(message, null, null, this.post.link).then(() => {
+    let message;
+   
+message = this.post.title.rendered + `\n` +
+  this.post.link + `\n` + `\n`
+  + `*` + this.data.message + `*` + `\n`
+  + `\n`;
+;
+console.log(message)
+
+    this.socialSharing.share(message, null, null, this.data.link).then(() => {
       // Sharing via email is possible
     }).catch(() => {
       // Sharing via email is not possible
@@ -172,8 +183,8 @@ export class PostpagePage {
   }
 
   ionViewWillLeave
-  () { 
+    () {
     if (this.admob) this.admob.prepareInterstitial({ adId: Config.adMobIdInterstitial, autoShow: true });
   }
-  
+
 }

@@ -35,7 +35,6 @@
     "@ionic-native/status-bar": "~4.20.0",
     "@ionic/pro": "2.0.4",
     "@ionic/storage": "2.2.0",
-    "branch-cordova-sdk": "3.1.6",
     "cordova-android": "7.1.4",
     "cordova-clipboard": "1.2.1",
     "cordova-plugin-admobpro": "2.37.2",
@@ -62,6 +61,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.2",
+    "@ionic/lab": "1.0.24",
     "typescript": "~2.6.2"
   },
   "description": "An Ionic project",
@@ -82,7 +82,6 @@
       },
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-network-information": {},
-      "branch-cordova-sdk": {},
       "ionic-plugin-deeplinks": {
         "URL_SCHEME": "palianews",
         "DEEPLINK_SCHEME": "https",

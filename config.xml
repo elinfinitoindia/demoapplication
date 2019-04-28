@@ -92,8 +92,6 @@
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.4" />
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <allow-navigation href="http://192.168.225.52:8100" sessionid="eb6c21cf" />
-    <engine name="android" spec="7.1.4" />
-    <plugin name="branch-cordova-sdk" spec="3.1.6" />
     <plugin name="ionic-plugin-deeplinks" spec="1.0.19">
         <variable name="URL_SCHEME" value="palianews" />
         <variable name="DEEPLINK_SCHEME" value="https" />
@@ -112,4 +110,5 @@
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
+    <engine name="android" spec="7.1.4" />
 </widget>
