@@ -5,7 +5,7 @@ export const adMobIdInterstitial = 'ca-app-pub-3940256099942544/1033173712';
 import { InAppBrowserOptions } from '@ionic-native/in-app-browser';
 
 export const options: InAppBrowserOptions = {
-  location: 'yes',//Or 'no' 
+  location: 'no',//Or 'no' 
   hidden: 'no', //Or  'yes'
   clearcache: 'yes',
   clearsessioncache: 'yes',

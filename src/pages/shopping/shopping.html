@@ -12,25 +12,17 @@
 
 <ion-content>
   <div *ngIf="data">
-    <ion-card id="catcards nopaddingoffercard" *ngFor="let items of data">
+    <ion-card id="catcards nopaddingoffercard" *ngFor="let items of data" (click)="getStore(items)">
   <ion-card-content style="padding:5px;">
     <ion-row>
       <ion-col item-left class="nopaddingcol" style="margin-top: 5px;margin-bottom: 0px;">
         <img src="{{items.logo}}" class="logo">
       </ion-col>
       <ion-col col-6>
-        <p style="white-space: normal;
-    color: #ff6700;
-    font-size: 15px;
-    font-weight: 600;
-    margin-top: 6px;">
+        <p class="discount">
          Get Faster delivery and great discounts. Shop Now!!
         </p>
       </ion-col>
-      <!-- <ion-col style="padding-top: 0px;padding-bottom: 0px;">
-        <ion-icon ios="ios-cash" md="md-cash" color="theme"></ion-icon>
-        <span style="color:blueviolet">Flat 25 CD Cashback </span>
-      </ion-col> -->
     </ion-row>
   </ion-card-content>
 </ion-card>

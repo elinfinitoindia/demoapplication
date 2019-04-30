@@ -4,7 +4,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { WordpressProvider } from '../providers/wordpress/wordpress';
@@ -20,11 +19,12 @@ import { Network } from '@ionic-native/network';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { BranchIo } from '@ionic-native/branch-io';
 import { Deeplinks } from '@ionic-native/deeplinks';
-import { LoginPage } from '../pages/login/login';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
+
+
 @NgModule({
   declarations: [
-    MyApp,
-    ListPage  
+    MyApp,  
   ],
   imports: [
     BrowserModule,
@@ -35,7 +35,6 @@ import { LoginPage } from '../pages/login/login';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    ListPage,
   ],
   providers: [
     StatusBar,
@@ -50,11 +49,13 @@ import { LoginPage } from '../pages/login/login';
       AdMobPro,
       Clipboard,
       WordpressProvider,
-    AuthenticationProvider,
-    Network,
-    LocalNotifications,
-    BranchIo,
-    Deeplinks
+      AuthenticationProvider,
+      Network,
+      LocalNotifications,
+      BranchIo,
+      Deeplinks,
+      GoogleAnalytics 
+    
     
   ]
 })

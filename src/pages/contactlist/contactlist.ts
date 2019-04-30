@@ -5,14 +5,7 @@ import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { Clipboard } from '@ionic-native/clipboard';
 import { AdMobPro } from '@ionic-native/admob-pro';
 import * as Config from '../../config';
-
-
-/**
- * Generated class for the ContactlistPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @IonicPage()
 @Component({
@@ -21,15 +14,20 @@ import * as Config from '../../config';
 })
 export class ContactlistPage {
 
-  public data:any;
+    public data:any;
+  
+  
+  
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private wordpress: WordpressProvider,
     private clipboard: Clipboard,
-  private admob:AdMobPro
+    private admob: AdMobPro,
+  private ga:GoogleAnalytics
   ) {
   
   }
+  
   ionViewWillEnter() {
     if (this.admob) this.admob.createBanner({
       adId: Config.adMobIdBanner,
@@ -37,32 +35,29 @@ export class ContactlistPage {
       adSize: "SMART_BANNER",
       autoShow: true
     });
-    
   }
 
   ionViewDidLoad() {
     var headers = new Headers();
     headers.append('Access-Control-Allow-Origin', '*');
-    
     console.log('ionViewDidLoad ContactlistPage');
     this.wordpress.getContacts().subscribe(res=>{
       this.data = res;
     },err=>{
         this.wordpress.createToast('Unable to load contacts');
     })
-
   }
 
-
-
   numberCopy(data) {
+  
+    this.ga.trackEvent('ShareApp', 'Tapped Action', 'Contact is shared ' + 0);
     this.clipboard.clear();
     this.clipboard.copy(data.Number);
     this.wordpress.createToast('Phone number has been copied');
   }
 
   ionViewWillLeave() {
-    // this.admob.removeBanner();
+    this.admob.removeBanner();
     
   }
   }
