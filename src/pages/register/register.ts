@@ -56,6 +56,8 @@ export class RegisterPage {
             email: values.email,
             password: values.password
           };
+
+          
           this.authenticationService.doRegister(user_data, res.json().token)
             .subscribe(
               result => {

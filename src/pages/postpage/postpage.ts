@@ -61,7 +61,7 @@ export class PostpagePage {
     if (this.admob) this.admob.createBanner({
       adId: Config.adMobIdBanner,
       position: this.admob.AD_POSITION.BOTTOM_CENTER,
-      adSize: 'MEDIUM_RECTANGLE',
+      adSize: 'SMART_BANNER',
       autoShow: true
     });
     
@@ -110,6 +110,7 @@ export class PostpagePage {
       })
   }
   createComment() {
+
     let user: any;
 
     this.authenticationService.getUser()
@@ -197,10 +198,12 @@ console.log(message);
     }).catch(() => {
       // Sharing via email is not possible
     });
+  
   }
 
   ionViewWillLeave
     () {
+    this.admob.removeBanner();
     if (this.admob) this.admob.prepareInterstitial({ adId: Config.adMobIdInterstitial, autoShow: true });
   }
 

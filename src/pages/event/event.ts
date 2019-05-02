@@ -5,6 +5,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import * as Config from '../../config';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Http } from '@angular/http';
+import { AdMobPro } from '@ionic-native/admob-pro';
 
 /**
  * Generated class for the LinkPage page.
@@ -27,7 +28,8 @@ export class EventPage {
     private loadingCtrl: LoadingController,
   private iab: InAppBrowser,
     private socialsharing: SocialSharing,
-  private http: Http) {
+    private http: Http,
+  private admob:AdMobPro) {
   }
 
   ionViewDidLoad() {
@@ -49,6 +51,16 @@ export class EventPage {
     console.log('ionViewDidLoad LinkPage');
   }
 
+  ionViewWillEnter() {
+    if (this.admob) this.admob.createBanner({
+      adId: Config.adMobIdBanner,
+      position: this.admob.AD_POSITION.BOTTOM_CENTER,
+      adSize: "SMART_BANNER",
+      autoShow: true
+    });
+    
+  }
+
   submitEvent() {
      this.iab.create('http://palianews.com/submit-your-events', '_self' , Config.options);
   }
@@ -67,6 +79,10 @@ export class EventPage {
     });
   
    
+  }
+
+  ionViewWillLeave() {
+    this.admob.removeBanner();
   }
 
 

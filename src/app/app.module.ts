@@ -26,8 +26,6 @@ import { LoginPage } from '../pages/login/login';
 @NgModule({
   declarations: [
     MyApp,  
-    LoginPage
-    
   ],
   imports: [
     BrowserModule,
@@ -38,7 +36,6 @@ import { LoginPage } from '../pages/login/login';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage
   ],
   providers: [
     StatusBar,
