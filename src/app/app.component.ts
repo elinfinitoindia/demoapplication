@@ -40,35 +40,11 @@ export class MyApp {
     { title: 'Home', pageName:'HomePage', icon: 'home' },
     { title: 'Submit News', pageName: 'SubmitNews', icon:"md-attach" },
     { title: 'Important Contacts', pageName: 'ContactlistPage', icon: 'contacts' },
-    { title: 'Todays Event', pageName: 'EventPage', icon: 'md-globe' },
-    { title: 'All in one shopping', pageName: 'ShoppingPage', icon: 'md-globe' },
-    {title:'Contact Us', pageName:'AboutPage', icon:'md-globe'},
+    { title: 'Todays Event', pageName: 'EventPage', icon: 'md-clock' },
+    { title: 'All in one shopping', pageName: 'ShoppingPage', icon: 'md-basket' },
+    {title:'Contact Us', pageName:'AboutPage', icon:'md-call'},
     { title: 'Login', pageName: 'LoginPage' , icon:'md-contact' },
    ];
-    
-    
-    this.deeplinks.route({
-      '/':'HomePage',
-      '/login': 'LoginPage',
-      '/archives/:id': 'PostpagePage',
-      '/todays-event':'EventPage',
-
-    }).subscribe(match => {
-      // match.$route - the route we matched, which is the matched entry from the arguments to route()
-      // match.$args - the args passed in the link
-      // match.$link - the full link data
-      this.nav.push(match.$route, match.$args).then(res => {
-        console.log('push successful')
-      }, err => {
-          this.nav.push('HomePage');
-          console.log('unsuccesful')
-      });
-      
-    }, nomatch => {
-      // nomatch.$link - the full link data
-    alert(JSON.stringify(nomatch))
-    });
-    
   }
 
   initializeApp() {
@@ -81,6 +57,29 @@ export class MyApp {
          this.splashScreen.hide();
       }, 1000);
 
+      
+      this.deeplinks.route({
+        '/': 'HomePage',
+        '/login': 'LoginPage',
+        '/archives/:id': 'PostpagePage',
+        '/todays-event': 'EventPage',
+      
+      }).subscribe(match => {
+        // match.$route - the route we matched, which is the matched entry from the arguments to route()
+        // match.$args - the args passed in the link
+        // match.$link - the full link data
+        this.nav.push(match.$route, match.$args).then(res => {
+          console.log('push successful')
+        }, err => {
+          this.nav.push('HomePage');
+          console.log('unsuccesful')
+        });
+      
+      }, nomatch => {
+        // nomatch.$link - the full link data
+        alert(JSON.stringify(nomatch))
+      });
+      
     });
     this.platform.registerBackButtonAction(() => {
       // Catches the active view

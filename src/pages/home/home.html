@@ -1,9 +1,9 @@
 <ion-header>
   <ion-navbar>
     <ion-title color="mycolor">
-  
       Palia News 
     </ion-title>
+    
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
@@ -22,17 +22,17 @@
 
 <ng-container *ngIf="isConnected; then thenTemplate; else elseTemplate"></ng-container>
 <ng-template #thenTemplate>
-  <div *ngIf="isdata">
+
 <ion-row>
   <ion-col width-90>
-     <ion-slides>
-  <ion-slide *ngFor="let item of adddata">
-    <img src="{{item.link}}" alt="">
+     <ion-slides autoplay="5000" loop="true" speed="3000" *ngIf="adddata && adddata.length">
+  <ion-slide *ngFor="let item of adddata" >
+    <img src="{{item.image}}" alt="">
   </ion-slide>
 </ion-slides>
   </ion-col>
 </ion-row>
- </div>
+
   <ion-card *ngFor="let post of posts">
     <ion-card-content>
       <ion-card-title [innerHTML]="post.title.rendered" style="color:red;font-weight:600;font-size:2.2rem"></ion-card-title>
