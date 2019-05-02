@@ -20,11 +20,14 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { BranchIo } from '@ionic-native/branch-io';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { LoginPage } from '../pages/login/login';
 
 
 @NgModule({
   declarations: [
     MyApp,  
+    LoginPage
+    
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LoginPage
   ],
   providers: [
     StatusBar,

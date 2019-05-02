@@ -102,11 +102,12 @@ export class HomePage{
       // get ads for slider 
       this.wordpress.getAdsData().subscribe(res => {
         this.adddata = res;
+        console.log(this.adddata)
         if (this.adddata.length > 0) {
           this.isdata = true;
         }
         else {
-          this.isdata = true;
+          this.isdata = false;
         }
       }, err => {
         this.wordpress.createToast('Unable to load news');

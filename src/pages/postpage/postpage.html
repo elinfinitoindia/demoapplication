@@ -32,12 +32,12 @@
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </div>
-<div *ngIf="adddata">
+<div *ngIf="isdata">
 <ion-row>
   <ion-col width-90>
      <ion-slides>
-  <ion-slide *ngFor="let item of items">
-    <img src="" alt="">
+  <ion-slide *ngFor="let item of adddata">
+    <img src="{{item.image}}" alt="">
   </ion-slide>
 </ion-slides>
   </ion-col>

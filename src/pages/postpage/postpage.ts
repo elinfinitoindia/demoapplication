@@ -29,7 +29,8 @@ export class PostpagePage {
   comments: Array<any> = new Array<any>();
   morePagesAvailable: boolean = true;
   public postid;
-
+  adddata;
+  isdata;
   constructor(
     public navParams: NavParams,
     public navCtrl: NavController,
@@ -43,17 +44,8 @@ export class PostpagePage {
     private admob: AdMobPro,
     private ga:GoogleAnalytics
   ) {
-    let backAction = platform.registerBackButtonAction(() => {
-      console.log("second");
-      this.navCtrl.pop();
-      backAction();
-    }, 2);
-    if (admob) admob.createBanner({
-      adId: Config.adMobIdBanner,
-      position: admob.AD_POSITION.BOTTOM_CENTER,
-      adSize: 'MEDIUM_RECTANGLE',
-      autoShow: true
-    });
+   
+  
   }
 
   ionViewDidLoad() {
@@ -61,6 +53,18 @@ export class PostpagePage {
   }
 
   ionViewWillEnter() {
+     let backAction = this.platform.registerBackButtonAction(() => {
+      console.log("second");
+      this.navCtrl.pop();
+      backAction();
+     }, 2);
+    if (this.admob) this.admob.createBanner({
+      adId: Config.adMobIdBanner,
+      position: this.admob.AD_POSITION.BOTTOM_CENTER,
+      adSize: 'MEDIUM_RECTANGLE',
+      autoShow: true
+    });
+    
     this.morePagesAvailable = true;
     let loading = this.loadingCtrl.create();
     loading.present();
@@ -72,6 +76,20 @@ export class PostpagePage {
       this.title = this.post.title.rendered;
     });
     loading.dismiss();
+        this.wordpressService.getAdsData().subscribe(res => {
+        this.adddata = res;
+        console.log(this.adddata)
+        if (this.adddata.length > 0) {
+          this.isdata = true;
+        }
+        else {
+          this.isdata = false;
+        }
+      }, err => {
+        this.wordpressService
+             .createToast('Unable to load news');
+      });
+    
   }
 
   getComments() {
@@ -152,7 +170,7 @@ export class PostpagePage {
               {
                 text: 'Login',
                 handler: () => {
-                  this.navCtrl.push(LoginPage);
+                  this.navCtrl.push('LoginPage');
                 }
               }
             ]
