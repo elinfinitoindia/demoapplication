@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import * as Config from '../../config';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @IonicPage()
 @Component({
@@ -13,12 +14,14 @@ import * as Config from '../../config';
 export class ShoppingPage {
 
   data: any;
-
+  applink
+    : any;
   constructor
     (public navCtrl: NavController,
     public navParams: NavParams,
     private wordpress: WordpressProvider,
-    private iab:InAppBrowser) {
+    private iab: InAppBrowser,
+  private socialSharing:SocialSharing) {
   }
 
   ionViewDidLoad() {
@@ -33,6 +36,18 @@ export class ShoppingPage {
 
   getStore(data) {
     this.iab.create(data.link , '_self' , Config.options )
+  }
+
+  shareApplication() {
+    
+    let message = `*Now get all the news and shopping apps at one place download the palia news app from playstore now.*`
+    
+    this.socialSharing.share(message, null, null, Config.appLink).then(() => {
+     
+    }).catch(() => {
+      console.log('error in sharing');
+    });
+  
   }
 
 }

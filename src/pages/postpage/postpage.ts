@@ -71,12 +71,6 @@ export class PostpagePage {
       console.log(this.post);
       this.title = this.post.title.rendered;
     });
-    this.wordpressService.getAppLink()
-      .subscribe(res => {
-        this.data = res;
-        console.log(this.data);
-      })
-    
     loading.dismiss();
   }
 
@@ -172,14 +166,14 @@ export class PostpagePage {
    
 message = this.post.title.rendered + `\n` +
   this.post.link + `\n` + `\n`
-  + `*` + this.data.message + `*` + `\n`
+  + `*` + Config.message + `*` + `\n`
   + `\n`;
 ;
 console.log(message);
  this.ga.trackEvent('ShareApp', 'Tapped Action', 'Item Tapped is '+this.post.title.rendered, 0);
     // That's right, we're pushing to ourselves!
 
-    this.socialSharing.share(message, null, null, this.data.link).then(() => {
+    this.socialSharing.share(message, null, null, Config.appLink).then(() => {
       // Sharing via email is possible
       
     }).catch(() => {

@@ -51,6 +51,8 @@ export class MyApp {
       '/':'HomePage',
       '/login': 'LoginPage',
       '/archives/:id': 'PostpagePage',
+      '/todays-event':'EventPage',
+
     }).subscribe(match => {
       // match.$route - the route we matched, which is the matched entry from the arguments to route()
       // match.$args - the args passed in the link

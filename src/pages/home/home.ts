@@ -178,22 +178,17 @@ export class HomePage{
   }
 
   shareApplication() {
-   
-    this.wordpress.getAppLink().subscribe(res => {
-      this.applink = res;
-    }
-      , err => {
-        console.log('cant get applink');
-      });
     
-    
-    this.socialSharing.share(this.applink.message, null, null, this.applink.link).then(() => {
-      console.log(this.applink);
+
+    var message = `*` + Config.message + `*` + `\n`;
+    this.socialSharing.share(message, null, null, Config.appLink).then(() => {
+      this.ga.trackEvent('ShareApp', 'Tapped Action', 'Item Tapped is', 0);
     }).catch(() => {
       console.log('error in sharing');
     });
   
   }
+
   ionViewWillLeave() {
     this.admob.removeBanner();
   }
