@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, IonicPage } from 'ionic-angular';
 import { AdMobPro } from '@ionic-native/admob-pro';
 import * as Config from '../../config';
+
+@IonicPage()
+  
 @Component({
   selector: 'page-list',
-  templateUrl: 'list.html'
+  templateUrl: 'about.html'
 })
-export class ListPage {
+export class AboutPage {
   selectedItem: any;
   icons: string[];
   items: Array<{title: string, note: string, icon: string}>;

@@ -5,15 +5,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ContactlistPage } from '../pages/contactlist/contactlist';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { AuthenticationProvider } from '../providers/authentication/authentication';
 import * as Config from '../config';
-import { LocalNotifications } from '@ionic-native/local-notifications';
-import * as moment from 'moment';
-
-import { PostpagePage } from '../pages/postpage/postpage';
-import { LoginPage } from '../pages/login/login';
 import { Deeplinks } from '@ionic-native/deeplinks';
 
 
@@ -46,24 +40,29 @@ export class MyApp {
     { title: 'Home', pageName:'HomePage', icon: 'home' },
     { title: 'Submit News', pageName: 'SubmitNews', icon:"md-attach" },
     { title: 'Important Contacts', pageName: 'ContactlistPage', icon: 'contacts' },
-    { title: 'Todays Event', pageName: 'LinkPage', icon: 'md-globe' },
+    { title: 'Todays Event', pageName: 'EventPage', icon: 'md-globe' },
     { title: 'All in one shopping', pageName: 'ShoppingPage', icon: 'md-globe' },
-    {title:'Contact Us', pageName:ListPage, icon:'md-globe'},
+    {title:'Contact Us', pageName:'AboutPage', icon:'md-globe'},
     { title: 'Login', pageName: 'LoginPage' , icon:'md-contact' },
    ];
     
     
     this.deeplinks.route({
-      '/login':  'LoginPage',
-       '/referral': 'PostpagePage',
+      '/':'HomePage',
+      '/login': 'LoginPage',
+      '/archives/:id': 'PostpagePage',
+      '/todays-event':'EventPage',
+
     }).subscribe(match => {
       // match.$route - the route we matched, which is the matched entry from the arguments to route()
       // match.$args - the args passed in the link
       // match.$link - the full link data
-     
-      alert(match.$route);
-      alert(JSON.stringify(match));
-      this.nav.push(match.$route, match.$args);
+      this.nav.push(match.$route, match.$args).then(res => {
+        console.log('push successful')
+      }, err => {
+          this.nav.push('HomePage');
+          console.log('unsuccesful')
+      });
       
     }, nomatch => {
       // nomatch.$link - the full link data

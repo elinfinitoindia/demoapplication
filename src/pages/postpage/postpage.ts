@@ -10,6 +10,7 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
 import { LoginPage } from '../login/login';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { AdMobPro } from '@ionic-native/admob-pro';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @IonicPage({
   segment: 'posts/:id',
@@ -39,7 +40,8 @@ export class PostpagePage {
     private http: Http,
     private platform: Platform,
     private socialSharing: SocialSharing,
-    private admob: AdMobPro
+    private admob: AdMobPro,
+    private ga:GoogleAnalytics
   ) {
     let backAction = platform.registerBackButtonAction(() => {
       console.log("second");
@@ -69,12 +71,6 @@ export class PostpagePage {
       console.log(this.post);
       this.title = this.post.title.rendered;
     });
-    this.wordpressService.getAppLink()
-      .subscribe(res => {
-        this.data = res;
-        console.log(this.data);
-      })
-    
     loading.dismiss();
   }
 
@@ -170,13 +166,16 @@ export class PostpagePage {
    
 message = this.post.title.rendered + `\n` +
   this.post.link + `\n` + `\n`
-  + `*` + this.data.message + `*` + `\n`
+  + `*` + Config.message + `*` + `\n`
   + `\n`;
 ;
-console.log(message)
+console.log(message);
+ this.ga.trackEvent('ShareApp', 'Tapped Action', 'Item Tapped is '+this.post.title.rendered, 0);
+    // That's right, we're pushing to ourselves!
 
-    this.socialSharing.share(message, null, null, this.data.link).then(() => {
+    this.socialSharing.share(message, null, null, Config.appLink).then(() => {
       // Sharing via email is possible
+      
     }).catch(() => {
       // Sharing via email is not possible
     });

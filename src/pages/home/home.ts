@@ -6,7 +6,7 @@ import * as Config from '../../config';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
-
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { PostpagePage } from '../postpage/postpage'
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { SocialSharing } from '@ionic-native/social-sharing';
@@ -41,19 +41,28 @@ export class HomePage{
     private platform:Platform,
     private appMinimize: AppMinimize,
     public app: App,
+    private ga: GoogleAnalytics
 
   ) {
     this.wordpress.mySubject.subscribe(res => {
       this.isConnected = res;
-    })
+    });
 
-  
-  }
-
-  ionViewDidEnter() {
+    this.ga.startTrackerWithId('UA-112909536-4')
+      .then(() => {
+        console.log('Google analytics is ready now');
+        this.ga.trackView('Home Page');
+        // Tracker is ready
+        // You can now track pages or set additional information such as AppVersion or UserId
+      })
+      .catch(e => console.log('Error starting GoogleAnalytics', e));
     
-}
-  
+
+    
+
+//  Tracking ID UA-112909536-4
+
+  }
 
   ionViewWillEnter() {
   
@@ -61,7 +70,7 @@ export class HomePage{
     this.network.onConnect().subscribe(data => {
       console.log(data)
       if (this.isOnline == false) {
-        this.doRefresh();
+        this.getPosts();
       }
       this.wordpress.createToast('You are online');
     }, error => console.error(error));
@@ -84,10 +93,36 @@ export class HomePage{
         autoShow: true
       });
       if (!(this.posts.length > 0)) {
-        let loading = this.loadingCtrl.create();
-        loading.present();
+       
+        this.getPosts();
+      
+      }
+
+   
+      // get ads for slider 
+      this.wordpress.getAdsData().subscribe(res => {
+        this.adddata = res;
+        if (this.adddata.length > 0) {
+          this.isdata = true;
+        }
+        else {
+          this.isdata = true;
+        }
+      }, err => {
+        this.wordpress.createToast('Unable to load news');
+      });
+    }
+    else {
+      this.wordpress.createToast('Please connect to internet');
+      
+    }
     
-        this.wordpress.getRecentPosts(1,7)
+  }
+  getPosts() {
+       let loading = this.loadingCtrl.create();
+       loading.present();
+       
+          this.wordpress.getRecentPosts(1,7)
           .subscribe(data => {
             for (let post of data) {
               post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
@@ -100,81 +135,41 @@ export class HomePage{
     
           });
       }
-      // get ads for slider 
-      this.wordpress.getAdsData().subscribe(res => {
-        this.adddata = res;
-        if (this.adddata.length > 0) {
-          this.isdata = true;
-        }
-        else {
-          this.isdata = true;
-        }
-      }, err => {
-        this.wordpress.createToast('Unable to load');
-      });
-    }
-    else {
-      this.wordpress.createToast('Please connect to internet');
-      
-    }
-    
-  }
 
-
-
-  doRefresh() {
+  doRefresh(refresher) {
 
     this.wordpress.getRecentPosts(1,7)
       .subscribe(data => {
         for (let post of data) {
           post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
           this.posts.push(post);
+          
         }
-
       }, err => {
         this.wordpress.createToast('Unable to load news');
+        });
 
-      });
-
-
-    // setTimeout(() => {
-    //   console.log('Async operation has ended');
-    //   refresher.complete();
-    // }, 2000);
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 2000);
   }
 
   doInfinite(infiniteScroll) {
     let page = (Math.ceil(this.posts.length / 10)) + 1;
     let loading = true;
-
-    // return this.http.get(
-    //   Config.WORDPRESS_REST_API_URL
-    //   + 'posts?page=' + page)
-    //   .map(res => res.json())
-    //   .subscribe(data => {
-    //     for (let post of data) {
-    //       if (!loading) {
-    //         infiniteScroll.complete();
-    //       }
-    //       post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
-    //       this.posts.push(post);
-    //       loading = false;
-    //     }
-    //   })
     this.wordpress.getRecentPosts(page, 7)
       .subscribe(data => {
         for (let post of data) {
           post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
           this.posts.push(post);
         }
-    
       }, err => {
         this.wordpress.createToast('Unable to load news');
     
       });
-    
-
   }
+
   postTapped(event, post) {
     console.log(post);
     this.navCtrl.push('PostpagePage', {
@@ -183,42 +178,17 @@ export class HomePage{
   }
 
   shareApplication() {
-   
-    //  https://jsonstorage.net/api/items/9ac59ecf-ee8d-459a-8d90-499b4f71978f
-    // this.http.get('https://jsonstorage.net/api/items/f8ffa470-4360-4206-908b-d944b7c690a1')
-    //   .map((res)=>res.json())
-    //   .subscribe(res => {
-    //    data = res;
-    //     this.socialSharing.share(message, null, null, data.link).then(() => {
-    //       console.log(data.link);
-    //     }).catch(() => {
-    //       // Sharing via email is not possible
-    //     });
-        
-    // },
-    //   err => {
-    //     console.log('unable to share link')
-    //   }
-    // )
-
-
-
-    this.wordpress.getAppLink().subscribe(res => {
-      this.applink = res;
-    }
-      , err => {
-        console.log('cant get applink');
-      })
     
-    
-    this.socialSharing.share(this.applink.message, null, null, this.applink.link).then(() => {
-      console.log(this.applink);
+
+    var message = `*` + Config.message + `*` + `\n`;
+    this.socialSharing.share(message, null, null, Config.appLink).then(() => {
+      this.ga.trackEvent('ShareApp', 'Tapped Action', 'Item Tapped is', 0);
     }).catch(() => {
       console.log('error in sharing');
-    })
+    });
   
-   
   }
+
   ionViewWillLeave() {
     this.admob.removeBanner();
   }

@@ -16,9 +16,9 @@ import { Http } from '@angular/http';
 @IonicPage()
 @Component({
   selector: 'page-link',
-  templateUrl: 'link.html',
+  templateUrl: 'event.html',
 })
-export class LinkPage {
+export class EventPage {
 
    posts: Array<any> = new Array<any>();
   constructor(public navCtrl: NavController,
@@ -55,24 +55,16 @@ export class LinkPage {
 
    shareApplication() {
     var data;
-    var message = 'Palia News now available on playstore, download it for latest news around you.';
+     var message = 'Please check todays events in Palia Kalan' + `\n` + `http://palianews.com/todays-event `
+       + `\n` + `\n` + ` Dowload the palia news android app from playstore check the below link`
+                                                                                                            
     
-    this.http.get('https://jsonstorage.net/api/items/f8ffa470-4360-4206-908b-d944b7c690a1')
-      .map((res)=>res.json())
-      .subscribe(res => {
-       data = res;
-        this.socialsharing
-             .share(message, null, null, data.link).then(() => {
-          console.log(data.link);
-        }).catch(() => {
-          // Sharing via email is not possible
-        });
-        
-    },
-      err => {
-        console.log('unable to share link')
-      }
-    )
+  this.socialsharing
+    .share(message, null, null, Config.appLink).then(() => {
+      
+    }).catch(() => {
+      // Sharing via email is not possible
+    });
   
    
   }

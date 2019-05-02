@@ -2,13 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
-
-/**
- * Generated class for the ShoppingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import * as Config from '../../config';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @IonicPage()
 @Component({
@@ -18,8 +14,14 @@ import { WordpressProvider } from '../../providers/wordpress/wordpress';
 export class ShoppingPage {
 
   data: any;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams , private wordpress:WordpressProvider) {
+  applink
+    : any;
+  constructor
+    (public navCtrl: NavController,
+    public navParams: NavParams,
+    private wordpress: WordpressProvider,
+    private iab: InAppBrowser,
+  private socialSharing:SocialSharing) {
   }
 
   ionViewDidLoad() {
@@ -30,6 +32,22 @@ export class ShoppingPage {
       err => {
         this.wordpress.createToast('Unable to load stores');
     })
+  }
+
+  getStore(data) {
+    this.iab.create(data.link , '_self' , Config.options )
+  }
+
+  shareApplication() {
+    
+    let message = `*Now get all the news and shopping apps at one place download the palia news app from playstore now.*`
+    
+    this.socialSharing.share(message, null, null, Config.appLink).then(() => {
+     
+    }).catch(() => {
+      console.log('error in sharing');
+    });
+  
   }
 
 }
