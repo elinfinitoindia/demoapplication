@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import * as Config from '../../config';
@@ -29,7 +29,8 @@ export class EventPage {
   private iab: InAppBrowser,
     private socialsharing: SocialSharing,
     private http: Http,
-  private admob:AdMobPro) {
+    private admob: AdMobPro,
+  private platform: Platform) {
   }
 
   ionViewDidLoad() {
@@ -58,6 +59,13 @@ export class EventPage {
       adSize: "SMART_BANNER",
       autoShow: true
     });
+
+    let backAction = this.platform.registerBackButtonAction(() => {
+      console.log("second");
+      this.navCtrl.setRoot('HomePage');
+      backAction();
+    }, 2);
+    
     
   }
 

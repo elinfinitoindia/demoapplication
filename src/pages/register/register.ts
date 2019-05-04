@@ -3,7 +3,8 @@ import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
-
+import { AdMobPro } from '@ionic-native/admob-pro';
+import * as Config from '../../config'
 @IonicPage(
   {
     defaultHistory: ['LoginPage',]
@@ -25,16 +26,31 @@ export class RegisterPage {
     public formBuilder: FormBuilder,
     public wordpressService: WordpressProvider,
     public authenticationService: AuthenticationProvider,
-    private platform: Platform
+    private platform: Platform,
+    private admob:AdMobPro
   ) {
-    let backAction = platform.registerBackButtonAction(() => {
+   
+  }
+
+
+  ionViewWillEnter() {
+    let backAction =this.platform.registerBackButtonAction(() => {
       console.log("second");
       this.navCtrl.pop();
       backAction();
     }, 2)
+    
   }
 
   ionViewWillLoad() {
+    if (this.admob) this.admob.createBanner({
+      adId: Config.adMobIdBanner,
+      position: this.admob.AD_POSITION.BOTTOM_CENTER,
+      adSize: "SMART_BANNER",
+      autoShow: true
+    });
+
+    
     this.register_form = this.formBuilder.group({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
@@ -44,8 +60,8 @@ export class RegisterPage {
   }
 
   onSubmit(values) {
-    var username: 'Admin'; // this should be an administrator Username
-    var password: 'aa'; // this should be an administrator Password
+    var username = 'Admin'; // this should be an administrator Username
+    var password = 'Elinfinito@22'; // this should be an administrator Password
     //only authenticated administrators can create users
     this.authenticationService.doLogin(username, password)
       .subscribe(
@@ -56,15 +72,15 @@ export class RegisterPage {
             email: values.email,
             password: values.password
           };
-
-          
           this.authenticationService.doRegister(user_data, res.json().token)
             .subscribe(
               result => {
                 console.log(result);
+                this.wordpressService.createToast('Registration Successful');
+                this.navCtrl.setRoot('HomePage');
               },
               error => {
-                console.log(error);
+                this.wordpressService.createToast('Error in registering user');
               }
             );
         },
@@ -72,6 +88,9 @@ export class RegisterPage {
           console.log(err);
         }
       )
+  
   }
-
+    ionViewWillLeave() {
+    this.admob.removeBanner();
+  }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { HomePage } from '../home/home';
 import { RegisterPage } from '../register/register';
@@ -26,13 +26,13 @@ export class LoginPage {
     public formBuilder: FormBuilder,
     public wordpressService: WordpressProvider,
     public authenticationService: AuthenticationProvider,
-    private admob:AdMobPro
+    private admob: AdMobPro,
+    private platform:Platform
   ) {
 
 
   }
  
-
   ionViewWillLoad() {
     this.login_form = this.formBuilder.group({
       username: new FormControl('', Validators.compose([
@@ -58,6 +58,13 @@ export class LoginPage {
       adSize: "SMART_BANNER",
       autoShow: true
     });
+
+    let backAction = this.platform.registerBackButtonAction(() => {
+      console.log("second");
+      this.navCtrl.setRoot('HomePage');
+      backAction();
+    }, 2);
+    
     
   }
 
@@ -79,13 +86,13 @@ export class LoginPage {
       },
         err => {
           loading.dismiss();
-          this.error_message = "Invalid credentials. Try with username 'aa' password 'aa'.";
+          this.error_message = "Invalid credentials.";
           console.log(err);
         })
   }
 
   skipLogin() {
-    this.navCtrl.setRoot(HomePage);
+    this.navCtrl.setRoot('HomePage');
   }
 
   goToRegister() {

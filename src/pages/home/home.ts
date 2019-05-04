@@ -14,6 +14,7 @@ import { AdMobPro } from '@ionic-native/admob-pro';
 import { Network } from '@ionic-native/network';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { App } from 'ionic-angular';
+import { OneSignal } from '@ionic-native/onesignal';
 
 @IonicPage()
 
@@ -30,6 +31,8 @@ export class HomePage{
   isConnected: boolean;
   isOnline: boolean;
   applink: any;
+  postCounter =0;
+
   constructor(
     public navCtrl: NavController, private iab: InAppBrowser, private http: Http,
     public navParams: NavParams,
@@ -38,15 +41,15 @@ export class HomePage{
     private socialSharing: SocialSharing,
     private admob: AdMobPro,
     private network: Network,
-    private platform:Platform,
+    private platform: Platform,
     private appMinimize: AppMinimize,
     public app: App,
-    private ga: GoogleAnalytics
+    private ga: GoogleAnalytics,
+    private oneSignal
+      : OneSignal
 
   ) {
-    this.wordpress.mySubject.subscribe(res => {
-      this.isConnected = res;
-    });
+   
 
     this.ga.startTrackerWithId('UA-112909536-4')
       .then(() => {
@@ -58,13 +61,13 @@ export class HomePage{
       .catch(e => console.log('Error starting GoogleAnalytics', e));
     
 
-    
-
-//  Tracking ID UA-112909536-4
-
   }
-
+  
   ionViewWillEnter() {
+  this.wordpress.mySubject.subscribe(res => {
+    this.isConnected = res;
+    console.log(res);
+  });
   
     
     this.network.onConnect().subscribe(data => {
@@ -82,10 +85,7 @@ export class HomePage{
       this.wordpress.createToast('You are offline');
       
     }, error => console.error(error));
-    
-    if (this.isConnected == true) {
-      
-    
+  
       if (this.admob) this.admob.createBanner({
         adId: Config.adMobIdBanner,
         position: this.admob.AD_POSITION.BOTTOM_CENTER,
@@ -97,8 +97,6 @@ export class HomePage{
         this.getPosts();
       
       }
-
-   
       // get ads for slider 
       this.wordpress.getAdsData().subscribe(res => {
         this.adddata = res;
@@ -112,11 +110,6 @@ export class HomePage{
       }, err => {
         this.wordpress.createToast('Unable to load news');
       });
-    }
-    else {
-      this.wordpress.createToast('Please connect to internet');
-      
-    }
     
   }
   getPosts() {
@@ -131,9 +124,11 @@ export class HomePage{
             }
             loading.dismiss();
           }, err => {
-            this.wordpress.createToast('Unable to load news');
-            loading.dismiss();
-    
+            this.wordpress.createToast('Error in loading news. Trying again');
+              loading.dismiss();
+              this.postCounter++
+              if(this.postCounter <2)
+              this.getPosts();
           });
       }
 
@@ -192,5 +187,6 @@ export class HomePage{
 
   ionViewWillLeave() {
     this.admob.removeBanner();
-  }
+    this.postCounter = 0;
+  } 
 }

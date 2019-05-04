@@ -9,8 +9,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { AuthenticationProvider } from '../providers/authentication/authentication';
 import * as Config from '../config';
 import { Deeplinks } from '@ionic-native/deeplinks';
-
-
+import { OneSignal } from '@ionic-native/onesignal';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,28 +22,29 @@ export class MyApp {
   admobid: any;
   notifications: any[] = [];
   notifyTime: any;
-  
-  
+
+
   constructor
     (public platform: Platform,
-      public statusBar: StatusBar, 
-    public splashScreen: SplashScreen,
-    private appMinimize: AppMinimize,
-    private iab: InAppBrowser,
-    public app: App,
-  private deeplinks: Deeplinks) {
+      public statusBar: StatusBar,
+      public splashScreen: SplashScreen,
+      private appMinimize: AppMinimize,
+      private iab: InAppBrowser,
+      public app: App,
+      private deeplinks: Deeplinks,
+      private oneSignal: OneSignal) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
-   this.pages = [
-    { title: 'Home', pageName:'HomePage', icon: 'home' },
-    { title: 'Submit News', pageName: 'SubmitNews', icon:"md-attach" },
-    { title: 'Important Contacts', pageName: 'ContactlistPage', icon: 'contacts' },
-    { title: 'Todays Event', pageName: 'EventPage', icon: 'md-clock' },
-    { title: 'All in one shopping', pageName: 'ShoppingPage', icon: 'md-basket' },
-    {title:'Contact Us', pageName:'AboutPage', icon:'md-call'},
-    { title: 'Login', pageName: 'LoginPage' , icon:'md-contact' },
-   ];
+    this.pages = [
+      { title: 'Home', pageName: 'HomePage', icon: 'home' },
+      { title: 'Submit News', pageName: 'SubmitNews', icon: "md-attach" },
+      { title: 'Important Contacts', pageName: 'ContactlistPage', icon: 'contacts' },
+      { title: 'Todays Event', pageName: 'EventPage', icon: 'md-clock' },
+      { title: 'All in one shopping', pageName: 'ShoppingPage', icon: 'md-basket' },
+      { title: 'Contact Us', pageName: 'AboutPage', icon: 'md-call' },
+      { title: 'Login', pageName: 'LoginPage', icon: 'md-contact' },
+    ];
   }
 
   initializeApp() {
@@ -54,16 +54,18 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       setTimeout(() => {
-         this.splashScreen.hide();
+        this.splashScreen.hide();
       }, 1000);
 
-      
+
+
+
       this.deeplinks.route({
         '/': 'HomePage',
         '/login': 'LoginPage',
         '/archives/:id': 'PostpagePage',
         '/todays-event': 'EventPage',
-      
+
       }).subscribe(match => {
         // match.$route - the route we matched, which is the matched entry from the arguments to route()
         // match.$args - the args passed in the link
@@ -74,34 +76,62 @@ export class MyApp {
           this.nav.push('HomePage');
           console.log('unsuccesful')
         });
-      
+
       }, nomatch => {
         // nomatch.$link - the full link data
         alert(JSON.stringify(nomatch))
       });
-      
+
+
+
+      this.oneSignal.startInit('b55b06dc-f3f2-4fd3-ad36-c2cf569eff90', '378365410413');
+      this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+      this.oneSignal.handleNotificationReceived().subscribe((data) => {
+        // do something when notification is received
+        data => this.onPushReceived(data.notification.payload)
+      });
+      this.oneSignal.handleNotificationOpened().subscribe(data => this.onPushOpened(data.notification.payload));
+      this.oneSignal.endInit();
+
+      //  Tracking ID UA-112909536-4
+      this.platform.registerBackButtonAction(() => {
+        // Catches the active view
+        // let nav = this.app.getActiveNavs()[0];
+        // let activeView = nav.getActive();
+        // Checks if can go back before show up the alert
+        // if (.name === 'HomePage') {
+        //   if (nav.canGoBack()) {
+        //     nav.pop();
+        //   }
+        //   else {
+        this.appMinimize.minimize();
+        //   }
+        // }
+      });
     });
-    this.platform.registerBackButtonAction(() => {
-      // Catches the active view
-      // let nav = this.app.getActiveNavs()[0];
-      // let activeView = nav.getActive();
-      // Checks if can go back before show up the alert
-      // if (.name === 'HomePage') {
-      //   if (nav.canGoBack()) {
-      //     nav.pop();
-      //   }
-      //   else {
-          this.appMinimize.minimize();
-      //   }
-      // }
-    });
-    
   }
-  
-    openPage(page: any) {
+  onPushReceived(payloaddata) {
+    console.log(payloaddata);
+  }
+  onPushOpened(payloaddata) {
+    console.log(JSON.stringify(payloaddata))
+    if (payloaddata.additionalData.page == 'Post') {
+      this.nav.push('PostpagePage', {
+        id:
+          payloaddata.additionalData.id
+      })
+    }
+    else {
+      this.nav.setRoot(payloaddata.additionalData.page);
+    }
+  }
+
+
+
+  openPage(page: any) {
     if (page.pageName == "SubmitNews") {
-      this.iab.create('http://palianews.com/submit-news', '_self' , Config.options
-                                                                    );
+      this.iab.create('http://palianews.com/submit-news', '_self', Config.options
+      );
     }
     else {
       this.nav.setRoot(page.pageName);
@@ -113,8 +143,7 @@ export class MyApp {
 
     // Fallback needed when there is no active childnav (tabs not active)
     if (this.nav.getActive() && this.nav.getActive().name === page.pageName
-    )
-    {
+    ) {
       return 'mycolor';
     }
   }

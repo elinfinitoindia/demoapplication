@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { Http , Headers } from '@angular/http';
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { Clipboard } from '@ionic-native/clipboard';
@@ -23,7 +23,8 @@ export class ContactlistPage {
     private wordpress: WordpressProvider,
     private clipboard: Clipboard,
     private admob: AdMobPro,
-  private ga:GoogleAnalytics
+    private ga: GoogleAnalytics,
+    private platform:Platform
   ) {
   
   }
@@ -35,6 +36,13 @@ export class ContactlistPage {
       adSize: "SMART_BANNER",
       autoShow: true
     });
+
+    let backAction = this.platform.registerBackButtonAction(() => {
+      console.log("second");
+      this.navCtrl.setRoot('HomePage');
+      backAction();
+    }, 2);
+    
   }
 
   ionViewDidLoad() {

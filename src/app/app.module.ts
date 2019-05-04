@@ -21,7 +21,7 @@ import { BranchIo } from '@ionic-native/branch-io';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { LoginPage } from '../pages/login/login';
-
+import { OneSignal } from '@ionic-native/onesignal';
 
 @NgModule({
   declarations: [
@@ -55,7 +55,9 @@ import { LoginPage } from '../pages/login/login';
       LocalNotifications,
       BranchIo,
       Deeplinks,
-      GoogleAnalytics 
+      GoogleAnalytics,
+      OneSignal
+      
     
     
   ]

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.palianews.app" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.palianews.app" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Palia News</name>
     <description>Now get latest news about your city on palia news application</description>
     <author email="prateek.it.555@gmail.com" href="">Prateek Agnihotri</author>
@@ -118,5 +118,6 @@
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
+    <plugin name="onesignal-cordova-plugin" spec="2.4.7" />
     <engine name="android" spec="7.1.4" />
 </widget>

@@ -51,12 +51,16 @@ export class AuthenticationProvider {
   }
 
   doRegister(user_data, token) {
-    return this.http.post(Config.WORDPRESS_REST_API_URL + 'users?token=' + token, user_data);
+       let header: Headers = new Headers();
+    header.append('Authorization', 'Bearer' + token);
+    return this.http.post(Config.WORDPRESS_REST_API_URL + 'users?token=' + token, user_data , { headers: header });
   }
 
   validateAuthToken(token) {
     let header: Headers = new Headers();
-    header.append('Authorization', 'Basic ' + token);
+    header.append('Authorization', 'Bearer' + token);
+    
+
     return this.http.post(Config.WORDPRESS_URL + 'wp-json/jwt-auth/v1/token/validate?token=' + token,
       {}, { headers: header })
   }

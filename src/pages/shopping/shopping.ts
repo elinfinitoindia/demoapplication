@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { WordpressProvider } from '../../providers/wordpress/wordpress';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import * as Config from '../../config';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { AdMobPro } from '@ionic-native/admob-pro';
 
 @IonicPage()
 @Component({
@@ -21,10 +22,20 @@ export class ShoppingPage {
     public navParams: NavParams,
     private wordpress: WordpressProvider,
     private iab: InAppBrowser,
-  private socialSharing:SocialSharing) {
+    private socialSharing: SocialSharing,
+    private admob: AdMobPro,
+    private platform :Platform
+  ) {
   }
 
   ionViewDidLoad() {
+
+  if (this.admob) this.admob.createBanner({
+        adId: Config.adMobIdBanner,
+        position: this.admob.AD_POSITION.BOTTOM_CENTER,
+        adSize: "SMART_BANNER",
+        autoShow: true
+      });
     console.log('ionViewDidLoad ShoppingPage');
     this.wordpress.getShoppingLinks().subscribe(res=>{
       this.data = res;
@@ -32,6 +43,15 @@ export class ShoppingPage {
       err => {
         this.wordpress.createToast('Unable to load stores');
     })
+  }
+
+  ionWillViewEnter() {
+  let backAction = this.platform.registerBackButtonAction(() => {
+    console.log("second");
+    this.navCtrl.pop();
+    backAction();
+  }, 2)
+  
   }
 
   getStore(data) {
@@ -48,6 +68,9 @@ export class ShoppingPage {
       console.log('error in sharing');
     });
   
+  }
+   ionViewWillLeave() {
+    this.admob.removeBanner();
   }
 
 }
